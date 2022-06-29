@@ -30,7 +30,7 @@ a {
    justify-content: center;
    align-items: center;
 text-align: center;
-padding: 20px;
+padding: 10px;
 background-color: rgb(76, 76, 196);
 }
 
@@ -39,7 +39,13 @@ background-color: rgb(76, 76, 196);
       height: 40px;
       display: flex;
       align-items: center;
+      border-radius: 3px;
+      
 }
+
+.search-block::placeholder {
+      color: rgb(76, 76, 196);
+   }
 
 .search-btn {
    position: absolute;
