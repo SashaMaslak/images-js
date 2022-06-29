@@ -1,6 +1,6 @@
-// body {
-
-// }
+body {
+position: relative;
+}
 
 * {
   box-sizing: border-box;
@@ -22,10 +22,10 @@ a {
 }
 
 #search-form {
-   position: fixed;
+   position: sticky;
    width: 100%;
    z-index: 5;
-   top: 10;
+   top: 0;
    display: flex;
    justify-content: center;
    align-items: center;
