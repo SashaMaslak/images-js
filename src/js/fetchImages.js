@@ -1,6 +1,9 @@
 import axios from 'axios';
+axios.defaults.baseURL = 'https://pixabay.com/api';
+
+
 const DEFAULT_PAGE = 1;
-const DEFAULT_PER_PAGE = 4;
+const DEFAULT_PER_PAGE = 40;
 let page = DEFAULT_PAGE;
 let per_page = DEFAULT_PER_PAGE;
 export const reserPage = () => {
@@ -18,21 +21,35 @@ export const fetchImages = (searchImg) => {
     per_page,
   });
 
-  return fetch(`https://pixabay.com/api/?${searchParams}`).then(res => {
-    if (res.ok) {
+  return axios
+    .get(`/?${searchParams}`)
+    .then(response => {
+      console.log(response.data.hits);
       page += 1;
-      return res.json();
-    }
-    throw new Error(res.statusText);
-  }).then(data => {
-    console.log(data);
-
-    return {
-      images: data.hits,
-      totalHits: data.totalHits,
-      isLastPage: page > (data.totalHits / per_page),
-    }
-  }
-  );
+      return {
+        images: response.data.hits,
+        totalHits: response.data.totalHits,
+        isLastPage: page > (response.data.totalHits / per_page),
+      }
+    })
+    .catch(error => console.log(error))
 }
+
+
+  // return fetch(`https://pixabay.com/api/?${searchParams}`).then(res => {
+  //   if (res.ok) {
+  //     page += 1;
+  //     return res.json();
+  //   }
+  //   throw new Error(res.statusText);
+  // }).then(data => {
+
+  //   return {
+  //     images: data.hits,
+  //     totalHits: data.totalHits,
+  //     isLastPage: page > (data.totalHits / per_page),
+  //   }
+  // }
+  // );
+
 

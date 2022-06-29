@@ -21,7 +21,11 @@ a {
    color: #000;
 }
 
-.search-form {
+#search-form {
+   position: fixed;
+   width: 100%;
+   z-index: 5;
+   top: 10;
    display: flex;
    justify-content: center;
    align-items: center;
