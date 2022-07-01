@@ -5,10 +5,6 @@ import { createImgCards } from './createImgCards';
 import { gallery } from './lightbox';
 
 const blockImg = document.querySelector('.gallery');
-// const loadMoreBtn = document.querySelector('.load-more');
-// loadMoreBtn.addEventListener('click', () => {
-
-// })
 
 const formSearch = document.querySelector('#search-form');
 formSearch.addEventListener('submit', submitImgBlock);
@@ -17,12 +13,8 @@ let searchImg = '';
 async function submitImgBlock(event) {
   event.preventDefault();
   gallery.refresh();
-  console.log(page);
-  
   reserPage();
-  console.log(page);
   window.scrollTo(0, 0);
-  // blockImg.innerHTML = '';
 
   searchImg = formSearch.elements.searchQuery.value;
 
@@ -30,8 +22,6 @@ async function submitImgBlock(event) {
     return Notify.failure(
       'Sorry, the search field is empty. Please fill in the search field.');
   }
-  
-  // loadMoreBtn.classList.remove('is-visible');
   await fetchImages(searchImg).then(({ images, isLastPage, totalHits }) => {
     
     if (images.length === 0) {
@@ -39,7 +29,6 @@ async function submitImgBlock(event) {
         'Sorry, there are no images matching your search query. Please try again.');
     }
     blockImg.innerHTML = createImgCards(images);
-    // loadMoreBtn.classList.add('is-visible');
     gallery.refresh();
     Notify.success(`Hooray! We found ${totalHits} images.`);
   });
@@ -53,11 +42,9 @@ async function submitImgBlock(event) {
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        console.log(entry);
-        
-        console.log('до функції ', page);
         fetchImages(searchImg).then(({ images, isLastPage, page, totalHits }) => {
-          // if (images.length < per_page) { return }
+            console.log(blockImg);
+            
             if (isLastPage) {
             return Notify.warning(
               'Sorry, but photos are over');
@@ -65,32 +52,17 @@ async function submitImgBlock(event) {
           blockImg.insertAdjacentHTML('beforeend', createImgCards(images));
           gallery.refresh();
           smoothScrolling();
-          console.log('після функції ', page);
         });
       }
-      
     });
   }, options);
-  if (page > 1) {
+
     observer.observe(document.querySelector('.scroll-guard'));
-  }
-  
-
-
-  formSearch.reset();
+    
+  formSearch.addEventListener('click', () => {
+    observer.unobserve(document.querySelector('.scroll-guard'));
+  });
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 new SimpleLightbox('.gallery a', {
   captions: true,

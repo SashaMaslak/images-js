@@ -23,8 +23,7 @@ export const fetchImages = async (searchImg) => {
 
   return await axios
     .get(`/?${searchParams}`)
-    .then(response => {
-      // console.log(response.data.hits);
+    .then(response => {;
       page += 1;
       return {
         images: response.data.hits,
