@@ -1,6 +1,6 @@
 import 'modern-normalize';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { fetchImages, reserPage, page } from './fetchImages';
+import { fetchImages, reserPage, isLastPage } from './fetchImages';
 import { createImgCards } from './createImgCards';
 import { gallery } from './lightbox';
 
@@ -36,22 +36,22 @@ async function submitImgBlock(event) {
 
   const options = {
     rootMargin: '200px',
-    threshold: 1.0,
+    threshold: 0.1,
   };
 
   const observer = new IntersectionObserver(entries => {
+    
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         fetchImages(searchImg).then(({ images, isLastPage, page, totalHits }) => {
-            console.log(blockImg);
             
-            if (isLastPage) {
-            return Notify.warning(
-              'Sorry, but photos are over');
-            }
           blockImg.insertAdjacentHTML('beforeend', createImgCards(images));
           gallery.refresh();
           smoothScrolling();
+          if (isLastPage) {
+            observer.unobserve(document.querySelector('.scroll-guard'));
+            return Notify.warning("We're sorry, but you've reached the end of search results.");
+            }
         });
       }
     });
@@ -82,3 +82,21 @@ function smoothScrolling() {
     behavior: 'smooth',
   });
 }
+
+
+
+
+
+
+// const elem = document.getElementById('block');
+
+// document.addEventListener('scroll', onScroll);
+
+// function onScroll() {
+//   const posTop = elem.getBoundingClientRect().top;
+  
+//   if(posTop + elem.clientHeight <= window.innerHeight && posTop >= 0) {
+//     elem.classList.add('visible');
+//     document.removeEventListener('scroll', onScroll);
+//   }
+// }

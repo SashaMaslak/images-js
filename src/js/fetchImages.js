@@ -52,5 +52,3 @@ export const fetchImages = async (searchImg) => {
   //   }
   // }
   // );
-
-
