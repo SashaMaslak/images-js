@@ -1,6 +1,6 @@
 import 'modern-normalize';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { fetchImages, reserPage } from './fetchImages';
+import { fetchImages, reserPage, page } from './fetchImages';
 import { createImgCards } from './createImgCards';
 import { gallery } from './lightbox';
 
@@ -16,45 +16,34 @@ let searchImg = '';
 
 async function submitImgBlock(event) {
   event.preventDefault();
+  gallery.refresh();
+  console.log(page);
+  
+  reserPage();
+  console.log(page);
+  window.scrollTo(0, 0);
+  // blockImg.innerHTML = '';
+
   searchImg = formSearch.elements.searchQuery.value;
 
   if (searchImg === '') {
     return Notify.failure(
-      'Sorry, the search field is empty. Please fill in the search field.',
-      {
-        ID: 'MKA',
-        timeout: 2500,
-        width: '280px',
-        position: 'top-right',
-      }
-    );
+      'Sorry, the search field is empty. Please fill in the search field.');
   }
-  reserPage();
+  
   // loadMoreBtn.classList.remove('is-visible');
   await fetchImages(searchImg).then(({ images, isLastPage, totalHits }) => {
+    
     if (images.length === 0) {
       return Notify.warning(
-        'Sorry, there are no images matching your search query. Please try again.',
-        {
-          ID: 'MKA',
-          timeout: 2500,
-          width: '280px',
-          textColor: '#f0f',
-          position: 'top-right',
-        }
-      );
+        'Sorry, there are no images matching your search query. Please try again.');
     }
     blockImg.innerHTML = createImgCards(images);
     // loadMoreBtn.classList.add('is-visible');
     gallery.refresh();
-    Notify.success(`Hooray! We found ${totalHits} images.`, {
-      ID: 'MKA',
-      timeout: 2500,
-      width: '280px',
-      textColor: '#f0f',
-      position: 'top-right',
-    });
+    Notify.success(`Hooray! We found ${totalHits} images.`);
   });
+
 
   const options = {
     rootMargin: '200px',
@@ -64,20 +53,44 @@ async function submitImgBlock(event) {
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        fetchImages(searchImg).then(({ images, isLastPage, totalHits }) => {
+        console.log(entry);
+        
+        console.log('до функції ', page);
+        fetchImages(searchImg).then(({ images, isLastPage, page, totalHits }) => {
+          // if (images.length < per_page) { return }
+            if (isLastPage) {
+            return Notify.warning(
+              'Sorry, but photos are over');
+            }
           blockImg.insertAdjacentHTML('beforeend', createImgCards(images));
           gallery.refresh();
           smoothScrolling();
-          // if (isLastPage) {
-          //    loadMoreBtn.classList.remove('is-visible');
-          // }
+          console.log('після функції ', page);
         });
       }
+      
     });
   }, options);
+  if (page > 1) {
+    observer.observe(document.querySelector('.scroll-guard'));
+  }
+  
 
-  observer.observe(document.querySelector('.scroll-guard'));
+
+  formSearch.reset();
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 new SimpleLightbox('.gallery a', {
   captions: true,

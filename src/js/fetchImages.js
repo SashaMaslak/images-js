@@ -4,13 +4,13 @@ axios.defaults.baseURL = 'https://pixabay.com/api';
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_PER_PAGE = 40;
-let page = DEFAULT_PAGE;
+export let page = DEFAULT_PAGE;
 let per_page = DEFAULT_PER_PAGE;
 export const reserPage = () => {
   page = DEFAULT_PAGE;
 }
 
-export const fetchImages = (searchImg) => {
+export const fetchImages = async (searchImg) => {
   const searchParams = new URLSearchParams({
     key: '28271863-d0d50fdaf1b013fa8dcdf01ae',
     q: searchImg,
@@ -21,15 +21,17 @@ export const fetchImages = (searchImg) => {
     per_page,
   });
 
-  return axios
+  return await axios
     .get(`/?${searchParams}`)
     .then(response => {
-      console.log(response.data.hits);
+      // console.log(response.data.hits);
       page += 1;
       return {
         images: response.data.hits,
         totalHits: response.data.totalHits,
         isLastPage: page > (response.data.totalHits / per_page),
+        per_page,
+        page,
       }
     })
     .catch(error => console.log(error))
