@@ -33,7 +33,6 @@ export const fetchImages = async (searchImg) => {
         page,
       }
     })
-    .catch(error => console.log(error))
 }
 
 
