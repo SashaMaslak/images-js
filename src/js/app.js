@@ -11,9 +11,11 @@ formSearch.addEventListener('submit', submitImgBlock);
 let searchImg = '';
 
 async function submitImgBlock(event) {
+
   event.preventDefault();
   gallery.refresh();
   reserPage();
+  
   window.scrollTo(0, 0);
 
   searchImg = formSearch.elements.searchQuery.value;
@@ -29,10 +31,12 @@ async function submitImgBlock(event) {
         'Sorry, there are no images matching your search query. Please try again.');
     }
     blockImg.innerHTML = createImgCards(images);
+    
     gallery.refresh();
     Notify.success(`Hooray! We found ${totalHits} images.`);
+    formSearch.reset();
   });
-
+  
 
   const options = {
     rootMargin: '200px',
@@ -62,6 +66,7 @@ async function submitImgBlock(event) {
   formSearch.addEventListener('click', () => {
     observer.unobserve(document.querySelector('.scroll-guard'));
   });
+
 }
 
 new SimpleLightbox('.gallery a', {
