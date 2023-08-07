@@ -1,21 +1,21 @@
 {
-  "name": "goit-js-hw-11",
+  "name": "images-js",
   "version": "2.0.0",
   "description": "",
-  "homepage": "https://github.com/SashaMaslak/goit-js-hw-11.git",
+  "homepage": "https://github.com/SashaMaslak/images-js.git",
   "scripts": {
     "start": "parcel src/*.html",
-    "build": "parcel build src/*.html --public-url /goit-js-hw-11/"
+    "build": "parcel build src/*.html --public-url /images-js/"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SashaMaslak/goit-js-hw-11.git"
+    "url": "git+https://github.com/SashaMaslak/images-js.git"
   },
   "keywords": [],
   "author": "Sasha Maslak <owmaslak@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/SashaMaslak/goit-js-hw-11/issues"
+    "url": "https://github.com/SashaMaslak/images-js/issues"
   },
   "dependencies": {
     "axios": "^0.27.2",
